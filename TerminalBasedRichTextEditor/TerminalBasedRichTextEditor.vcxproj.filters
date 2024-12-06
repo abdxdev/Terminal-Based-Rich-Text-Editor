@@ -30,12 +30,18 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DebugUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StatusBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cursor.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Test.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="GapBuffer.h">
@@ -45,6 +51,21 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugUtils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GapBufferLinkedList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StatusBar.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
