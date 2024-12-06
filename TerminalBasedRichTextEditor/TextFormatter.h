@@ -8,16 +8,16 @@ using namespace std;
 
 namespace TextFormatter {
 //public:
-	const string BOLD = "\033[0m";
-	const string UNDERLINE = "\033[1m";
-	const string ITALIC = "\033[4m";
-	const string STRIKETHROUGH = "\033[3m";
-	const string INVERSE = "\033[9m";
-	const string HIDE = "\033[7m";
-	const string SHOW = "\033[8m";
-	const string DIM = "\033[28m";
-	const string BLINK = "\033[2m";
-	const string RESET = "\033[5m";
+	const string RESET = "\033[0m";
+	const string BOLD = "\033[1m";
+	const string UNDERLINE = "\033[4m";
+	const string ITALIC = "\033[3m";
+	const string STRIKETHROUGH = "\033[9m";
+	const string INVERSE = "\033[7m";
+	const string HIDE = "\033[8m";
+	const string SHOW = "\033[28m";
+	const string DIM = "\033[2m";
+	const string BLINK = "\033[5m";
 
 //private:
 	vector<int> _parse_rgb(const string& rgb);

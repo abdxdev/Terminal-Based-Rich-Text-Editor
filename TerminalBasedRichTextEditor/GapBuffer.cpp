@@ -17,15 +17,12 @@ void GapBuffer::expandBuffer() {
 }
 
 void GapBuffer::moveGap(int position) {
-    if (position < gapStart) {
-        while (gapStart > position) {
+    if (position < gapStart) 
+        while (gapStart > position) 
             buffer[--gapEnd] = buffer[--gapStart];
-        }
-    } else if (position > gapStart) {
-        while (gapStart < position) {
+    else if (position > gapStart) 
+        while (gapStart < position) 
             buffer[gapStart++] = buffer[gapEnd++];
-        }
-    }
 }
 
 void GapBuffer::insert(char c) {
@@ -134,6 +131,23 @@ void GapBuffer::display() const {
     for (int i = gapEnd; i < buffer.size(); ++i)
         cout << buffer[i];
     cout << '\n';
+}
+
+string GapBuffer::getDebugText() const {
+	string text;
+	text.reserve(buffer.size() - (gapEnd - gapStart));
+	text.append(buffer.begin(), buffer.begin() + gapStart);
+    text.append("_");
+	text.append(buffer.begin() + gapEnd, buffer.end());
+	return text;
+}
+
+int GapBuffer::getLength() const {
+	return buffer.size() - (gapEnd - gapStart);
+}
+
+int GapBuffer::getCursorPosition() const {
+    return gapStart + 1;
 }
 
 void GapBuffer::undo() {

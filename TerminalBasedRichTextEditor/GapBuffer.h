@@ -43,6 +43,9 @@ public:
     void deleteSelection();
 
     void display() const;
+    string getDebugText() const;
+	int getLength() const;
+	int getCursorPosition() const;
 
     void undo();
     void redo();

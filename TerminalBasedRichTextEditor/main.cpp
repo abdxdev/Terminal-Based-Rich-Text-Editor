@@ -27,17 +27,28 @@ public:
 	string help_message;
 	string file_name;
 	string editor_title;
-	bool isSavedFile;
-	pair<int, int> current_pos;
+	bool is_file_saved;
+	//pair<int, int> current_pos;
 	pair<int, int> absolute_screen_size;
+	vector<wstring> left_status_bar_entries;
 
 	Editor() {
 		absolute_screen_size = get_screen_size();
-		isSavedFile = false;
+		//current_pos = { 1, 1 };
+		is_file_saved = false;
 		help_keybind = "F1";
 		help_message = "Press " + help_keybind + " for help";
 		file_name = "Untitled.txt";
 		editor_title = "Rich Text Editor";
+		left_status_bar_entries = {
+			L"",
+			stows(editor_title),
+			get_file_path(L"  ", 3),
+			stows(file_name),
+			//L"Ln " + to_wstring(1) + L", Col " + to_wstring(1)
+			L"Ln 1, Col 1"
+		};
+		printStatusBar({ 1, 1 });
 	}
 
 	wstring get_file_path(const wstring& delimiter, int max_folders = 0) {
@@ -56,37 +67,17 @@ public:
 		for (size_t i = 0; i < path_segments.size(); ++i) {
 			path_str += delimiter + path_segments[i];
 		}
-		return path_str;
+		return L"\u001b]8;;" + current_path + L"\u001b\\" + path_str + L"\u001b]8;;\u001b\\";
 	}
 
-	void printStatusBar() {
-		// customization
-		// #0c212f
-		// #26bdbb
-		// wstring text_to_display = L"    " + stows(editor_title) + L"    source  repos  TerminalBasedRichTextEditor  Untitled.txt*  Ln 50, Col 129";
-		// cout << hex_to_ansi("#000000") + hex_to_ansi("#3dabff", false) << setw(pos.second) <<  << RESET;
-		// cout << get_format("#000000", "#3dabff") << setw(absolute_screen_size.second) << editor_title << RESET;
-		//     Rich Text Editor    source  repos  TerminalBasedRichTextEditor  Untitled.txt*  Ln 50, Col 129
-		vector<wstring> left_status_bar_entries{
-			L"",
-			stows(editor_title),
-			get_file_path(L"  ", 3),
-			stows(file_name),
-		};
+	void printStatusBar(pair<int, int> current_pos) {
 
-		// vector<wstring> right_status_bar_entries{
-		// 	L" ",
-		// 	L"Ln 50, Col 129",
-		// 	L"",
-		// };
-
-		move_to({ absolute_screen_size.first, 1 });
+		left_status_bar_entries[3] = stows(file_name) + (is_file_saved ? L"" : L"*");
+		left_status_bar_entries[4] = L"Ln " + to_wstring(current_pos.first) + L", Col " + to_wstring(current_pos.second);
 
 		string default_color = "#000000";
 		string accent_color1 = "#26bdbb";
 		string accent_color2 = "#0c212f";
-
-		_setmode(_fileno(stdout), _O_U16TEXT);
 		wstring text_to_display = L"";
 		for (int i = 0; i < left_status_bar_entries.size(); ++i) {
 			string fg, bg;
@@ -98,87 +89,97 @@ public:
 				fg = accent_color2;
 				bg = accent_color1;
 			}
-			if (i == 0) {
+			if (i == 0)
 				text_to_display += stows(get_format(bg, default_color)) + L"" + stows(get_format(fg, bg));
-			}
-			else {
+			else
 				text_to_display += stows(get_format(default_color, bg)) + L"" + stows(get_format(fg, bg));
-			}
-			text_to_display += L" "+left_status_bar_entries[i] + L" ";
+			text_to_display += L" " + left_status_bar_entries[i] + L" ";
 			text_to_display += stows(get_format(bg, default_color));
-			if (i < left_status_bar_entries.size() - 1) {
+			if (i < left_status_bar_entries.size() - 1)
 				text_to_display += L"";
-			}
-			else {
+			else
 				text_to_display += L"";
-			}
 		}
-		wcout << text_to_display << stows(RESET);
-		_setmode(_fileno(stdout), _O_TEXT);
 
+		move_to({ absolute_screen_size.first, 1 });
+		_setmode(_fileno(stdout), _O_U16TEXT);
+		wcout << text_to_display;
+		_setmode(_fileno(stdout), _O_TEXT);
+		cout << RESET;
+		clear_line_from_cursor();
 		move_to(current_pos);
 	}
 
-	void startTyping() {
+	void debugMessage(pair<int, int> current_pos, pair<int, int> target_pos, string message) {
+		move_to(target_pos);
+		cout << message;
+		clear_line_from_cursor();
+		move_to(current_pos);
 	}
 };
 
 int main() {
 	// CheckKeys();
+	cout << "Make terminal full screen and press enter";
+	_getch();
+	system("cls");
+
 	GapBuffer editor;
 	int key;
 	bool running = true;
 
 	Editor e;
-	e.printStatusBar();
 
 	while (running) {
+		show();
 		key = _getch();
+		hide();
 
 		if (key == 224) {
-			do {
-				key = _getch();
-			} while (key == 224);
+			//do {
+			//	key = _getch();
+			//} while (key == 224);
 
-			switch (key) {
+			//switch (key) {
+			switch (_getch()) {
 			case 75:
-				editor.moveCursorRelative(-1);
-				e.current_pos.second--;
+				if (editor.getCursorPosition() > 1) {
+					editor.moveCursorRelative(-1);
+				}
 				break;
 			case 77:
-				editor.moveCursorRelative(1);
-				e.current_pos.second++;
+				if (editor.getCursorPosition() <= editor.getLength()) {
+					editor.moveCursorRelative(1);
+				}
 				break;
 			default:
 				break;
 			}
 		}
 		else {
-
 			switch (key) {
 			case 27:
 				running = false;
 				break;
 			case 8:
-				editor.deleteChar();
-				e.current_pos.second--;
+				if (editor.getCursorPosition() > 1) {
+					editor.moveCursorRelative(-1);
+					editor.deleteChar();
+				}
 				break;
 			default:
 				if (key >= 32 && key <= 126) {
 					editor.insert(static_cast<char>(key));
-					e.current_pos.second++;
 				}
 				break;
 			}
 		}
 
-		move_to({ e.current_pos.first, 1 });
+		move_to({ 1, 1 });
 		clear_line_from_cursor();
 		editor.display();
-
-		move_to(e.current_pos);
+		e.debugMessage({ 1, editor.getCursorPosition() }, { 2, 1 }, "Cursor position: " + editor.getDebugText());
+		e.printStatusBar({ 1, editor.getCursorPosition() });
 	}
-
-	cout << "Exiting editor. Goodbye!\n";
 	return 0;
 }
