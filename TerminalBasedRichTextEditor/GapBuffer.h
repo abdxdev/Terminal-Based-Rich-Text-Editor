@@ -28,7 +28,8 @@ public:
 
     void insert(char c);
     void insert(const string& text);
-    void deleteChar();
+    void deleteCharLeft();
+    void deleteCharRight();
     void deleteChars(int count);
     void moveCursor(int position);
     void moveCursorRelative(int offset);

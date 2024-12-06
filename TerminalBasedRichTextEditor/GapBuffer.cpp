@@ -5,13 +5,10 @@ GapBuffer::GapBuffer(int initialSize) : buffer(initialSize, '\0'), gapStart(0), 
 void GapBuffer::expandBuffer() {
     int newSize = buffer.size() * 2;
     vector<char> newBuffer(newSize, '\0');
-
     for (int i = 0; i < gapStart; ++i)
         newBuffer[i] = buffer[i];
-
     for (int i = gapEnd; i < buffer.size(); ++i)
         newBuffer[newSize - (buffer.size() - i)] = buffer[i];
-
     gapEnd += newSize - buffer.size();
     buffer = move(newBuffer);
 }
@@ -37,9 +34,14 @@ void GapBuffer::insert(const string& text) {
     }
 }
 
-void GapBuffer::deleteChar() {
+void GapBuffer::deleteCharLeft() {
     if (gapStart > 0)
         --gapStart;
+}
+
+void GapBuffer::deleteCharRight() {
+    if (gapEnd < buffer.size())
+        ++gapEnd;
 }
 
 void GapBuffer::deleteChars(int count) {
@@ -50,7 +52,7 @@ void GapBuffer::deleteChars(int count) {
 
 void GapBuffer::moveCursor(int position) {
     if (position < 0 || position > buffer.size() - (gapEnd - gapStart)) {
-        cerr << "Invalid cursor position\n";
+        throw "Invalid cursor position";
         return;
     }
     moveGap(position);
@@ -88,7 +90,7 @@ int GapBuffer::find(const string& text) const {
     combinedBuffer.append(buffer.begin(), buffer.begin() + gapStart);
     combinedBuffer.append(buffer.begin() + gapEnd, buffer.end());
 
-    size_t pos = combinedBuffer.find(text);
+    int pos = combinedBuffer.find(text);
     return (pos != string::npos) ? static_cast<int>(pos) : -1;
 }
 
@@ -147,7 +149,7 @@ int GapBuffer::getLength() const {
 }
 
 int GapBuffer::getCursorPosition() const {
-    return gapStart + 1;
+    return gapStart;
 }
 
 void GapBuffer::undo() {
