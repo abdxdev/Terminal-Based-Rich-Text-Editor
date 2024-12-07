@@ -29,7 +29,8 @@ int Editor::getAbsCol(int col) const {
 	return col + left_bound + left_line_number_gap;
 }
 
-Action Editor::handleKeyInput(int key) {
+Action Editor::handleKeyInput() {
+	int key = _getch();
 	if (key == 0) {
 		return OTHER;
 	}
@@ -67,6 +68,8 @@ Action Editor::handleKeyInput(int key) {
 		case 12:  // Ctrl + L
 			refreshScreen();
 			return OTHER;
+		case 27: // ESC key
+			return BREAK;
 		default:
 			if (key >= 32 && key <= 126)
 				gapBufferEditor.insert(static_cast<char>(key));
@@ -120,13 +123,12 @@ void Editor::run() {
 			render();
 			Cursor::move_to(getAbsPos(local_current_pos));
 			// Cursor::show();
-			int key = _getch();
-			if (key == 27) { // ESC key
+			Action action = handleKeyInput();
+			// Cursor::hide();
+			if (action == BREAK) {
 				system("cls");
 				break;
 			}
-			Action action = handleKeyInput(key);
-			// Cursor::hide();
 
 			int rowChange = gapBufferEditor.getCursorRow() - local_current_pos.first;
 			int colChange = gapBufferEditor.getCursorColumn() - local_current_pos.second;

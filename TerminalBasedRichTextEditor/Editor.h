@@ -21,6 +21,7 @@ enum Action {
 	DELETE,
 	MOVE_CURSOR,
     OTHER,
+    BREAK,
 };
 
 class Editor {
@@ -44,7 +45,7 @@ private:
     GapBufferLinkedList gapBufferEditor;
     StatusBar statusBar;
 
-    Action handleKeyInput(int key);
+    Action handleKeyInput();
     void render();
     void renderLineNumber(int row) const;
     void renderAllLines(int local_from_row);

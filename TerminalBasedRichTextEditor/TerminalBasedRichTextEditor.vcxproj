@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AutoSuggestion.cpp" />
     <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="DebugUtils.cpp" />
     <ClCompile Include="Editor.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="TextFormatter.cpp" />
+    <ClCompile Include="Trie.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,11 +149,16 @@
     <ClInclude Include="Editor.h" />
     <ClInclude Include="GapBuffer.h" />
     <ClInclude Include="GapBufferLinkedList.h" />
+    <ClInclude Include="AutoSuggestion.h" />
     <ClInclude Include="main2.h" />
     <ClInclude Include="StatusBar.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="TextFormatter.h" />
+    <ClInclude Include="Trie.h" />
     <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="words.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
