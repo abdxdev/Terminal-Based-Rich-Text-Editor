@@ -39,6 +39,9 @@
     <ClCompile Include="StatusBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GapBufferLinkedList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cursor.h">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="StatusBar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

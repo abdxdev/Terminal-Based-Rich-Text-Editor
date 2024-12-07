@@ -135,6 +135,7 @@
     <ClCompile Include="DebugUtils.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="GapBuffer.cpp" />
+    <ClCompile Include="GapBufferLinkedList.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="TextFormatter.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="GapBufferLinkedList.h" />
     <ClInclude Include="main2.h" />
     <ClInclude Include="StatusBar.h" />
+    <ClInclude Include="Test.h" />
     <ClInclude Include="TextFormatter.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

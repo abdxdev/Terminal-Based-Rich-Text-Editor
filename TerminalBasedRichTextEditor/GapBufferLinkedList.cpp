@@ -71,13 +71,13 @@ void GapBufferLinkedList::moveCursorRight() {
 void GapBufferLinkedList::display() const {
     Line* temp = head;
     while (temp) {
-        temp->gapBuffer.display();
+        temp->gapBuffer.display(-1, -1);
         temp = temp->next;
     }
 }
 
-void GapBufferLinkedList::displayCurrentLine() const {
-    currentLine->gapBuffer.display();
+void GapBufferLinkedList::displayCurrentLine(int from = 0, int to = -1) const {
+    currentLine->gapBuffer.display(from, to);
 }
 
 int GapBufferLinkedList::getCursorRow() const {
@@ -88,11 +88,24 @@ int GapBufferLinkedList::getCursorColumn() const {
     return currentLine->gapBuffer.getCursorPosition();
 }
 
+int GapBufferLinkedList::getLinesCount() const {
+    int count = 0;
+    Line* temp = head;
+    while (temp) {
+        ++count;
+        temp = temp->next;
+    }
+    return count;
+}
+
 pair<int, int> GapBufferLinkedList::getCursorPosition() const {
     return {getCursorRow(), getCursorColumn()};
 }
 
 void GapBufferLinkedList::splitLine() {
+    int cursorPos = currentLine->gapBuffer.getCursorPosition();
+    string rightContent = currentLine->gapBuffer.getTextAfterCursor();
+    currentLine->gapBuffer.deleteToEnd();
     Line* newLine = new Line();
     newLine->prev = currentLine;
     newLine->next = currentLine->next;
@@ -100,7 +113,9 @@ void GapBufferLinkedList::splitLine() {
         currentLine->next->prev = newLine;
     }
     currentLine->next = newLine;
+    newLine->gapBuffer.insert(rightContent);
     currentLine = newLine;
+    currentLine->gapBuffer.moveCursor(0);
     ++cursorRow;
 }
 
@@ -113,4 +128,17 @@ void GapBufferLinkedList::mergeLine() {
     }
     delete temp;
     --cursorRow;
+}
+
+vector<string> GapBufferLinkedList::getLines(int from, int to) const {
+    vector<string> lines;
+    Line* temp = head;
+    for (int i = 0; i < from; ++i) {
+        temp = temp->next;
+    }
+    for (int i = from; i <= to; ++i) {
+        lines.push_back(temp->gapBuffer.getLine());
+        temp = temp->next;
+    }
+    return lines;
 }

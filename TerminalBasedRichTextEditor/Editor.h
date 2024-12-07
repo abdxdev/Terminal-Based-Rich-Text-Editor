@@ -16,8 +16,15 @@
 
 using namespace std;
 
+enum Action {
+	INSERT,
+	DELETE,
+	MOVE_CURSOR,
+};
+
 class Editor {
 private:
+
     pair<int, int> local_current_pos;
     pair<int, int> absolute_screen_size;
     int left_bound;
@@ -33,9 +40,10 @@ private:
     GapBufferLinkedList gapBufferEditor;
     StatusBar statusBar;
 
-    void handleKeyInput(int key);
+    Action handleKeyInput(int key);
     void render();
-    void renderLineNumber();
+    void renderLineNumber(int row);
+    void renderAllLinesFromCursor();
 
     pair<int, int> getAbsPos(const pair<int, int>& pos) const;
     int getAbsRow(int row) const;

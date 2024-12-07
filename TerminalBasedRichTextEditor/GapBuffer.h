@@ -15,10 +15,10 @@ private:
     int gapStart;
     int gapEnd;
 
-	string clipboard;
-	pair<int, int> selection = {-1, -1};
-	stack<pair<int, string>> undoStack;
-	stack<pair<int, string>> redoStack;
+    string clipboard;
+    pair<int, int> selection = {-1, -1};
+    stack<pair<int, string>> undoStack;
+    stack<pair<int, string>> redoStack;
 
     void expandBuffer();
     void moveGap(int position);
@@ -43,11 +43,15 @@ public:
     void selectText(int start, int end);
     void deleteSelection();
 
-    void display() const;
+    void display(int from, int to) const;
     string getDebugText() const;
-	int getLength() const;
-	int getCursorPosition() const;
+	string getLine() const;
+    int getLength() const;
+    int getCursorPosition() const;
 
     void undo();
     void redo();
+
+    string getTextAfterCursor() const;
+    void deleteToEnd();
 };

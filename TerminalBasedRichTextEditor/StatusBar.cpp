@@ -52,7 +52,7 @@ void StatusBar::buildEntries() {
         {"file_name", 2},
         {"cursor_pos", 3},
     };
-    entries.push_back(getFormattedFilePath("  ", 3));
+    entries.push_back(getFormattedFilePath("  ", 1));
     entries.push_back(file_name + (is_file_saved ? "" : "*"));
     entries.push_back("Ln " + to_string(local_cursor_pos.first) + ", Col " + to_string(local_cursor_pos.second));
 }

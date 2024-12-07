@@ -1,8 +1,8 @@
 #pragma once
 
 #include "GapBuffer.h"
-#include <utility>
 #include <iostream>
+#include <utility>
 
 using namespace std;
 
@@ -20,6 +20,7 @@ private:
     Line* head;
     Line* currentLine;
     int cursorRow;
+    // void splitLineContent();
 
 public:
     GapBufferLinkedList();
@@ -35,11 +36,13 @@ public:
     void moveCursorRight();
 
     void display() const;
-    void displayCurrentLine() const;
+    void displayCurrentLine(int from, int to) const;
 
     int getCursorRow() const;
     int getCursorColumn() const;
+    int getLinesCount() const;
     pair<int, int> getCursorPosition() const;
+    vector<string> getLines(int from, int to) const;
 
 private:
     void splitLine();
