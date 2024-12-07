@@ -22,7 +22,7 @@
 
 // class Editor {
 // public:
-//     int left_gap;
+//     int left_line_number_gap;
 //     string help_keybind;
 //     string help_message;
 //     string file_name;
@@ -35,7 +35,7 @@
 //     vector<wstring> left_status_bar_entries;
 
 //     Editor() {
-//         left_gap = 6;
+//         left_line_number_gap = 6;
 //         absolute_screen_size = get_screen_size();
 //         top_left_bound = {3, 9};
 //         bottom_right_bound = {absolute_screen_size.first - 1, absolute_screen_size.second};//
@@ -109,7 +109,7 @@
 //     }
 
 //     pair<int, int> get_abs_pos(pair<int, int> pos) {
-//         return {pos.first + top_left_bound.first, pos.second + top_left_bound.second + left_gap};
+//         return {pos.first + top_left_bound.first, pos.second + top_left_bound.second + left_line_number_gap};
 //     }
 
 //     int get_abs_row(int row) {
@@ -117,7 +117,7 @@
 //     }
 
 //     int get_abs_col(int col) {
-//         return col + top_left_bound.second + left_gap;
+//         return col + top_left_bound.second + left_line_number_gap;
 //     }
 
 //     int get_abs_right_bound() {
@@ -125,7 +125,7 @@
 //     }
 
 //     int get_abs_left_bound() {
-//         return top_left_bound.second + left_gap;
+//         return top_left_bound.second + left_line_number_gap;
 //     }
 
 //     int get_abs_top_bound() {
@@ -162,8 +162,8 @@
 //         move_to({editorInstance.absolute_screen_size.first, 1});
 //         editorInstance.printStatusBar(gapBufferEditor.getCursorPosition());
         
-//         move_to({abs_pos.first, editorInstance.get_abs_left_bound() - editorInstance.left_gap});
-//         cout << setw(editorInstance.left_gap) << to_string(gapBufferEditor.getCursorRow() + 1) + ": ";
+//         move_to({abs_pos.first, editorInstance.get_abs_left_bound() - editorInstance.left_line_number_gap});
+//         cout << setw(editorInstance.left_line_number_gap) << to_string(gapBufferEditor.getCursorRow() + 1) + ": ";
         
 //         move_to(abs_pos);
 //         try {

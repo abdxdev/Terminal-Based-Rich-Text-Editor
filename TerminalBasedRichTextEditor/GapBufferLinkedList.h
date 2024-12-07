@@ -27,6 +27,7 @@ public:
     ~GapBufferLinkedList();
 
     void insert(char c);
+    void insert(const string& s);
     void deleteCharLeft();
     void deleteCharRight();
 
@@ -34,6 +35,7 @@ public:
     void moveCursorDown();
     void moveCursorLeft();
     void moveCursorRight();
+    void moveCursor(int x, int y);
 
     void display() const;
     void displayCurrentLine(int from, int to) const;

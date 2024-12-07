@@ -20,6 +20,7 @@ enum Action {
 	INSERT,
 	DELETE,
 	MOVE_CURSOR,
+    OTHER,
 };
 
 class Editor {
@@ -32,7 +33,10 @@ private:
     int top_bound;
     int bottom_bound;
 
-    int left_gap;
+    int vertical_scroll;
+    int horizontal_scroll;
+
+    int left_line_number_gap;
     bool is_file_saved;
     string file_path;
 
@@ -42,12 +46,15 @@ private:
 
     Action handleKeyInput(int key);
     void render();
-    void renderLineNumber(int row);
-    void renderAllLinesFromCursor();
+    void renderLineNumber(int row) const;
+    void renderAllLines(int local_from_row);
 
     pair<int, int> getAbsPos(const pair<int, int>& pos) const;
     int getAbsRow(int row) const;
     int getAbsCol(int col) const;
+
+    //void updateCursor(int x, int y);
+    void refreshScreen();
 
 public:
     Editor();
