@@ -39,6 +39,7 @@ public:
 
     void display() const;
     void displayCurrentLine(int from, int to) const;
+    string getCurrentDebugLine() const;
 
     int getCursorRow() const;
     int getCursorColumn() const;

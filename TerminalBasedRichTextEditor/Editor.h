@@ -26,7 +26,7 @@ enum Action {
 
 class Editor {
 private:
-
+    map<string, int> settings;
     pair<int, int> local_current_pos;
     pair<int, int> absolute_screen_size;
     int left_bound;
@@ -56,6 +56,7 @@ private:
 
     //void updateCursor(int x, int y);
     void refreshScreen();
+    void toggleSetting(string settingName);
 
 public:
     Editor();

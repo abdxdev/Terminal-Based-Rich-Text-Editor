@@ -1,7 +1,8 @@
 #include "Editor.h"
+#include "AutoSuggestion.h"
 
 Editor::Editor() {
-	// Cursor::hide();
+	settings["autosuggestion"] = 1;
 	local_current_pos = { 0, 0 };
 	vertical_scroll = 0;
 	horizontal_scroll = 0;
@@ -31,9 +32,8 @@ int Editor::getAbsCol(int col) const {
 
 Action Editor::handleKeyInput() {
 	int key = _getch();
-	if (key == 0) {
+	if (key == 0)
 		return OTHER;
-	}
 	else if (key == 224) {
 		switch (_getch()) {
 		case 75: // left arrow key
@@ -68,14 +68,28 @@ Action Editor::handleKeyInput() {
 		case 12:  // Ctrl + L
 			refreshScreen();
 			return OTHER;
+		case 14: // Ctrl + N
+			toggleSetting("autosuggestion");
+			return OTHER;
 		case 27: // ESC key
 			return BREAK;
 		default:
-			if (key >= 32 && key <= 126)
+			if ((('A' <= key && key <= 'Z') || ('a' <= key && key <= 'z')) && settings["autosuggestion"]) {
+				string word = string(1, key);
+				bool isComplete = AutoSuggestion::getInput(4, word, getAbsPos(local_current_pos), 30);
+				gapBufferEditor.insert(word);
+				if (isComplete)
+					gapBufferEditor.insert(' ');
+			}
+			else if (key >= 32 && key <= 126)
 				gapBufferEditor.insert(static_cast<char>(key));
 			return INSERT;
 		}
 	}
+}
+
+void Editor::toggleSetting(string settingName) {
+	settings[settingName] = (settings[settingName]) ? 0 : 1;
 }
 
 void Editor::refreshScreen() {
@@ -122,9 +136,9 @@ void Editor::run() {
 		try {
 			render();
 			Cursor::move_to(getAbsPos(local_current_pos));
-			// Cursor::show();
+			Cursor::show();
 			Action action = handleKeyInput();
-			// Cursor::hide();
+			Cursor::hide();
 			if (action == BREAK) {
 				system("cls");
 				break;
@@ -162,6 +176,7 @@ void Editor::run() {
 			else if (action == DELETE) {
 				renderAllLines(local_current_pos.first);
 			}
+			DebugUtils::displayDebugMessage(gapBufferEditor.getCurrentDebugLine(), { bottom_bound, left_bound });
 		}
 		catch (const char* e) {
 			DebugUtils::displayDebugMessage(e, { bottom_bound, left_bound });

@@ -45,6 +45,6 @@ vector<string> Trie::getSuggestions(const string& prefix, int limit = -1) {
 			return suggestions;
 		current = current->children[c];
 	}
-	collectWords(current, prefix, suggestions, limit = -1);
+	collectWords(current, prefix, suggestions, limit);
 	return suggestions;
 }

@@ -1,6 +1,6 @@
-#include "StatusBar.h"
+#include "TopBar.h"
 
-StatusBar::StatusBar(vector<string> custom_entries, pair<int, int> screen_size, string file_path, string file_name, pair<int, int> local_cursor_pos, bool is_file_saved) {
+TopBar::TopBar(vector<string> custom_entries, pair<int, int> screen_size, string file_path, string file_name, pair<int, int> local_cursor_pos, bool is_file_saved) {
     this->custom_entries = custom_entries;
     this->screen_size = screen_size;
     this->file_path = file_path;
@@ -11,32 +11,32 @@ StatusBar::StatusBar(vector<string> custom_entries, pair<int, int> screen_size, 
     buildEntries();
 }
 
-void StatusBar::updateFileName(string file_name) {
+void TopBar::updateFileName(string file_name) {
     this->file_name = file_name;
     entries[custom_entries.size() + entry_positions["file_name"] - 1] = file_name + (is_file_saved ? "" : "*");
 }
 
-void StatusBar::updateCursorPos(pair<int, int> local_cursor_pos) {
+void TopBar::updateCursorPos(pair<int, int> local_cursor_pos) {
     this->local_cursor_pos = local_cursor_pos;
     entries[custom_entries.size() + entry_positions["cursor_pos"] - 1] = "Ln " + to_string(local_cursor_pos.first + 1) + ", Col " + to_string(local_cursor_pos.second + 1);
 }
 
-void StatusBar::updateIsFileSaved(bool is_file_saved) {
+void TopBar::updateIsFileSaved(bool is_file_saved) {
     this->is_file_saved = is_file_saved;
     entries[custom_entries.size() + entry_positions["file_name"] - 1] = file_name + (is_file_saved ? "" : "*");
 }
 
-void StatusBar::updateFilePath(string file_path) {
+void TopBar::updateFilePath(string file_path) {
     this->file_path = file_path;
     entries[custom_entries.size() + entry_positions["file_path"] - 1] = getFormattedFilePath("  ", 2);
 }
 
-void StatusBar::updateScreenSize(pair<int, int> screen_size) {
+void TopBar::updateScreenSize(pair<int, int> screen_size) {
     this->screen_size = screen_size;
     this->status_bar_length = 0;
 }
 
-void StatusBar::display() {
+void TopBar::display() {
     string formatted_entries = formatEntries();
     if (!status_bar_length) {
         pair<int, int> position_old = Cursor::get_position();
@@ -55,7 +55,7 @@ void StatusBar::display() {
     Cursor::clear_line_from_cursor();
 }
 
-void StatusBar::buildEntries() {
+void TopBar::buildEntries() {
     for (int i = 0; i < custom_entries.size(); ++i) {
         entries.push_back(custom_entries[i]);
     }
@@ -70,7 +70,7 @@ void StatusBar::buildEntries() {
     entries.push_back("Ln " + to_string(local_cursor_pos.first) + ", Col " + to_string(local_cursor_pos.second));
 }
 
-string StatusBar::formatEntries() {
+string TopBar::formatEntries() {
     string text_to_display = "";
     string default_color = "#000000";
     string accent_color1 = "#26bdbb";
@@ -98,7 +98,7 @@ string StatusBar::formatEntries() {
     return text_to_display;
 }
 
-string StatusBar::getFormattedFilePath(const string& delimiter, int max_folders = 0) {
+string TopBar::getFormattedFilePath(const string& delimiter, int max_folders = 0) {
     stringstream ss(file_path);
     string segment;
     vector<string> path_segments;

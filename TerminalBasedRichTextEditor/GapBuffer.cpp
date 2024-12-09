@@ -160,7 +160,11 @@ string GapBuffer::getDebugText() const {
 	string text;
 	text.reserve(buffer.size() - (gapEnd - gapStart));
 	text.append(buffer.begin(), buffer.begin() + gapStart);
-	text.append("_");
+
+	for (int i = gapStart; i < gapEnd; ++i) {
+		text += '_';
+	}
+	
 	text.append(buffer.begin() + gapEnd, buffer.end());
 	return text;
 }

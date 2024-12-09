@@ -3,7 +3,7 @@
 
 void DebugUtils::displayDebugMessage(const string& message, const pair<int, int>& position) {
 	cout << "\033[" << position.first << ";" << position.second << "H" << TextFormatter::get_format("#ffffff", "#ff0000") << message + " ";
-	system("pause");
+	//system("pause");
 	cout << TextFormatter::RESET;
 }
 

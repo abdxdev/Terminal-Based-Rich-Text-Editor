@@ -113,6 +113,10 @@ void GapBufferLinkedList::displayCurrentLine(int from = 0, int to = -1) const {
 	currentLine->gapBuffer.display(from, to);
 }
 
+string GapBufferLinkedList::getCurrentDebugLine() const {
+	return currentLine->gapBuffer.getDebugText();
+}
+
 int GapBufferLinkedList::getCursorRow() const {
 	return cursorRow;
 }

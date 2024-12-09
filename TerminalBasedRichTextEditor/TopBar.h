@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class StatusBar {
+class TopBar {
 private:
     vector<string> custom_entries;
     vector<string> entries;
@@ -28,8 +28,8 @@ private:
     string formatEntries();
 
 public:
-    StatusBar() = default;
-    StatusBar(vector<string> static_entries, pair<int, int> screen_size, string file_path, string file_name, pair<int, int> local_cursor_pos, bool is_file_saved);
+    TopBar() = default;
+    TopBar(vector<string> static_entries, pair<int, int> screen_size, string file_path, string file_name, pair<int, int> local_cursor_pos, bool is_file_saved);
     string getFormattedFilePath(const string& delimiter, int max_folders);
     void buildEntries();
     void updateFileName(string file_name);
