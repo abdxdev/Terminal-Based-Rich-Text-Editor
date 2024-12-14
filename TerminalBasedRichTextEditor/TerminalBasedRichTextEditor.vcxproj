@@ -145,6 +145,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ColorSelector.h" />
     <ClInclude Include="Cursor.h" />
     <ClInclude Include="DebugUtils.h" />
     <ClInclude Include="Editor.h" />

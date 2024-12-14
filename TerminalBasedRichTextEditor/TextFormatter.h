@@ -7,7 +7,7 @@
 using namespace std;
 
 namespace TextFormatter {
-//public:
+	//public:
 	const string RESET = "\033[0m";
 
 	const string BOLD = "\033[1m";
@@ -28,17 +28,23 @@ namespace TextFormatter {
 	const string N_DIM = "\033[22m";
 	const string N_BLINK = "\033[25m";
 
-//private:
+	//private:
 	vector<int> _parse_rgb(const string& rgb);
 
-//public:
+	//public:
 	string get_format(const string& fg = "", const string& bg = "", const bool bold = false, const bool underline = false, const bool italic = false, const bool strikethrough = false, const bool blink = false, const bool dim = false);
+	string convert_to_bg(const string& fg);
+	string convert_to_fg(const string& bg);
 
 	string rgb_to_ansi(int r, int g, int b, const bool fg = true);
 	string rgb_to_ansi(const vector<int>& rgb, const bool fg = true);
 	string hsl_to_ansi(int h, int s, int l, const bool fg = true);
 	string hsl_to_ansi(const vector<int>& hsl, const bool fg = true);
 	string hex_to_ansi(const string& hex, const bool fg = true);
+
+	vector<int> ansi_to_rgb(const string& ansi);
+	vector<int> ansi_to_hsl(const string& ansi);
+	string ansi_to_hex(const string& ansi);
 
 	vector<int> hsl_to_rgb(int h, int s, int l);
 	vector<int> hsl_to_rgb(const vector<int>& hsl);

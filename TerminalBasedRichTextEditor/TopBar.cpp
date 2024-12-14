@@ -18,14 +18,12 @@ void TopBar::toggleFormat(eFormats format) {
 
 string TopBar::getCurrentFormatting(eFormats format) {
     for (auto f : formats) {
-        if (!f.formatName == format)
-            continue;
-        if (find(selectedFormats.begin(), selectedFormats.end(), format) != selectedFormats.end())
-            return f.start;
-        else
-            return f.stop;
+        if (f.formatName == format) {
+            if (find(selectedFormats.begin(), selectedFormats.end(), format) != selectedFormats.end())
+                return f.start;
+        }
     }
-    return "";
+    return formats[format].stop;
 }
 
 string TopBar::getCurrentFormattings() {
@@ -45,7 +43,7 @@ void TopBar::changeForegroundColor(string color) {
     this->foregroundColor = color;
 }
 
-void TopBar::ChangeBackgroundColor(string color) {
+void TopBar::changeBackgroundColor(string color) {
     this->backgroundColor = color;
 }
 
@@ -86,7 +84,7 @@ string TopBar::formatEntries() {
 
 string TopBar::makePill(string text, string pill_color, string pill_background, string foreground_color = "") {
     string left = TextFormatter::get_format(pill_color, pill_background) + "";
-    string content = TextFormatter::get_format(foreground_color, pill_color) + " " + text + " ";
+    string content = TextFormatter::get_format(foreground_color, pill_color) + " " + text + TextFormatter::get_format(foreground_color, pill_color) + " ";
     string right = TextFormatter::get_format(pill_color, pill_background) + "";
 
     return " " + left + content + right + " ";

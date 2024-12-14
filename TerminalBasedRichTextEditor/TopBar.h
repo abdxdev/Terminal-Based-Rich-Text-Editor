@@ -57,7 +57,7 @@ public:
 	string getCurrentFormattings();
 	void toggleAutoSuggestion();
 	void changeForegroundColor(string color);
-	void ChangeBackgroundColor(string color);
+	void changeBackgroundColor(string color);
 
 	void updateScreenSize(pair<int, int> screenSize);
 	string formatEntries();

@@ -89,6 +89,9 @@
     <ClInclude Include="TopBar.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="ColorSelector.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="words.txt">

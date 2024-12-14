@@ -25,6 +25,9 @@ enum Action {
     AUTOSUGGESTION,
     OTHER,
     BREAK,
+    FULL_REFRESH,
+    REFRESH,
+    SOFT_REFRESH
 };
 
 class Editor {
@@ -58,7 +61,7 @@ private:
     int getAbsCol(int col) const;
 
     // void updateCursor(int x, int y);
-    void refreshScreen();
+    void refreshScreen(bool screenChanged);
 
 public:
     Editor();
