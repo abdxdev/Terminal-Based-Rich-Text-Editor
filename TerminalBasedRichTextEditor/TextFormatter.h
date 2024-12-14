@@ -9,15 +9,24 @@ using namespace std;
 namespace TextFormatter {
 //public:
 	const string RESET = "\033[0m";
+
 	const string BOLD = "\033[1m";
 	const string UNDERLINE = "\033[4m";
 	const string ITALIC = "\033[3m";
 	const string STRIKETHROUGH = "\033[9m";
 	const string INVERSE = "\033[7m";
 	const string HIDE = "\033[8m";
-	const string SHOW = "\033[28m";
 	const string DIM = "\033[2m";
 	const string BLINK = "\033[5m";
+
+	const string N_BOLD = "\033[22m";
+	const string N_UNDERLINE = "\033[24m";
+	const string N_ITALIC = "\033[23m";
+	const string N_STRIKETHROUGH = "\033[29m";
+	const string N_INVERSE = "\033[27m";
+	const string N_HIDE = "\033[28m";
+	const string N_DIM = "\033[22m";
+	const string N_BLINK = "\033[25m";
 
 //private:
 	vector<int> _parse_rgb(const string& rgb);

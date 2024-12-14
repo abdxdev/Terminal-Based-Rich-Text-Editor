@@ -6,7 +6,7 @@
 using namespace std;
 
 int main() {
-	//DebugUtils::checkKeys();
+	// DebugUtils::checkKeys();
 	Editor editor;
 	editor.run();
 	return 0;

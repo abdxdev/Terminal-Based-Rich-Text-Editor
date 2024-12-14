@@ -67,7 +67,7 @@ public:
 					stop = true;
 					break;
 				default:
-					if (' ' <= key <= '~') {
+					if (' ' <= key && key <= '~') {
 						token += static_cast<char>(key);
 						cout << static_cast<char>(key);
 						cursor_pos++;

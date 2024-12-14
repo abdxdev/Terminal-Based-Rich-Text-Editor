@@ -1,182 +1,182 @@
 #include "GapBufferLinkedList.h"
 
-GapBufferLinkedList::Line::Line(int capacity)
-	: gapBuffer(capacity), prev(nullptr), next(nullptr) {
-}
-
-GapBufferLinkedList::GapBufferLinkedList()
-	: head(new Line()), currentLine(head), cursorRow(0) {
-}
+GapBufferLinkedList::GapBufferLinkedList() : head(new Line()),
+                                             currentLine(head),
+                                             cursorRow(0) {}
 
 GapBufferLinkedList::~GapBufferLinkedList() {
-	while (head) {
-		Line* temp = head;
-		head = head->next;
-		delete temp;
-	}
+    while (head) {
+        Line* temp = head;
+        head = head->next;
+        delete temp;
+    }
 }
 
 void GapBufferLinkedList::insert(char c) {
-	if (c == '\n') {
-		splitLine();
-	}
-	else {
-		currentLine->gapBuffer.insert(c);
-	}
+    if (c == '\n') {
+        splitLine();
+    } else {
+        currentLine->gapBuffer.insert(c);
+    }
 }
 
 void GapBufferLinkedList::insert(const string& s) {
-	for (char c : s) {
-		insert(c);
-	}
+    for (char c : s) {
+        insert(c);
+    }
 }
 
 void GapBufferLinkedList::deleteCharLeft() {
-	if (getCursorColumn() > 0) {
-		currentLine->gapBuffer.deleteCharLeft();
-	}
-	else if (currentLine->prev) {
-		int prev_ling_length = currentLine->prev->gapBuffer.getLength();
-		mergeLine();
-		currentLine->gapBuffer.moveCursor(prev_ling_length);
-	}
+    if (currentLine->gapBuffer.getVisualCursorPosition() > 0) {
+        currentLine->gapBuffer.deleteCharLeft();
+    } else if (currentLine->prev) {
+        int prevLineLength = currentLine->prev->gapBuffer.getLength();
+        mergeLine();
+        currentLine->gapBuffer.moveCursor(prevLineLength);
+    }
 }
 
 void GapBufferLinkedList::deleteCharRight() {
-	if (getCursorColumn() < currentLine->gapBuffer.getLength()) {
-		currentLine->gapBuffer.deleteCharRight();
-	}
-	else if (currentLine->next) {
-		currentLine->gapBuffer.deleteCharRight();
-		mergeLine();
-	}
+    if (currentLine->gapBuffer.getVisualCursorPosition() < currentLine->gapBuffer.getLength()) {
+        currentLine->gapBuffer.deleteCharRight();
+    } else if (currentLine->next) {
+        currentLine->gapBuffer.deleteCharRight();
+        mergeLine();
+    }
 }
 
 void GapBufferLinkedList::moveCursorUp() {
-	if (!currentLine->prev)
-		return;
-	int currentColumn = getCursorColumn();
-	currentLine = currentLine->prev;
-	currentLine->gapBuffer.moveCursor(min(currentColumn, currentLine->gapBuffer.getLength()));
-	--cursorRow;
+    if (!currentLine->prev)
+        return;
+    int currentVisualColumn = currentLine->gapBuffer.getVisualCursorPosition();
+    currentLine = currentLine->prev;
+    currentLine->gapBuffer.moveCursor(
+        min(currentVisualColumn,
+            currentLine->gapBuffer.getLength()));
+    --cursorRow;
 }
 
 void GapBufferLinkedList::moveCursorDown() {
-	if (!currentLine->next)
-		return;
-	int currentColumn = getCursorColumn();
-	currentLine = currentLine->next;
-	currentLine->gapBuffer.moveCursor(min(currentColumn, currentLine->gapBuffer.getLength()));
-	++cursorRow;
+    if (!currentLine->next)
+        return;
+    int currentVisualColumn = currentLine->gapBuffer.getVisualCursorPosition();
+    currentLine = currentLine->next;
+    currentLine->gapBuffer.moveCursor(
+        min(currentVisualColumn,
+            currentLine->gapBuffer.getLength()));
+    ++cursorRow;
 }
 
 void GapBufferLinkedList::moveCursorLeft() {
-	if (getCursorColumn() == 0 && currentLine->prev) {
-		currentLine = currentLine->prev;
-		currentLine->gapBuffer.moveCursor(currentLine->gapBuffer.getLength());
-		--cursorRow;
-	}
-	else
-		currentLine->gapBuffer.moveCursorRelative(-1);
+    if (currentLine->gapBuffer.getVisualCursorPosition() == 0 && currentLine->prev) {
+        currentLine = currentLine->prev;
+        currentLine->gapBuffer.moveCursor(currentLine->gapBuffer.getLength());
+        --cursorRow;
+    } else {
+        currentLine->gapBuffer.moveCursorRelative(-1);
+    }
 }
 
 void GapBufferLinkedList::moveCursorRight() {
-	if (getCursorColumn() == currentLine->gapBuffer.getLength() && currentLine->next) {
-		currentLine = currentLine->next;
-		currentLine->gapBuffer.moveCursor(0);
-		++cursorRow;
-	}
-	else
-		currentLine->gapBuffer.moveCursorRelative(1);
+    if (currentLine->gapBuffer.getVisualCursorPosition() == currentLine->gapBuffer.getLength() && currentLine->next) {
+        currentLine = currentLine->next;
+        currentLine->gapBuffer.moveCursor(0);
+        ++cursorRow;
+    } else {
+        currentLine->gapBuffer.moveCursorRelative(1);
+    }
 }
 
-void GapBufferLinkedList::moveCursor(int x, int y) {
-	Line* temp = head;
-	for (int i = 0; i < x; i++) {
-		if (!temp->next)
-			break;
-		temp = temp->next;
-	}
-	currentLine = temp;
-	currentLine->gapBuffer.moveCursor(y);
+void GapBufferLinkedList::moveCursor(int row, int column) {
+    Line* temp = head;
+    for (int i = 0; i < row; i++) {
+        if (!temp->next)
+            break;
+        temp = temp->next;
+    }
+    currentLine = temp;
+    currentLine->gapBuffer.moveCursor(column);
+    cursorRow = row;
 }
 
 void GapBufferLinkedList::display() const {
-	Line* temp = head;
-	while (temp) {
-		temp->gapBuffer.display(-1, -1);
-		temp = temp->next;
-	}
+    Line* temp = head;
+    while (temp) {
+        temp->gapBuffer.display(-1, -1);
+        cout << '\n';
+        temp = temp->next;
+    }
 }
 
-void GapBufferLinkedList::displayCurrentLine(int from = 0, int to = -1) const {
-	currentLine->gapBuffer.display(from, to);
+void GapBufferLinkedList::displayCurrentLine(int from, int to) const {
+    currentLine->gapBuffer.display(from, to);
 }
 
 string GapBufferLinkedList::getCurrentDebugLine() const {
-	return currentLine->gapBuffer.getDebugText();
+    return currentLine->gapBuffer.getDebugText();
 }
 
 int GapBufferLinkedList::getCursorRow() const {
-	return cursorRow;
+    return cursorRow;
 }
 
 int GapBufferLinkedList::getCursorColumn() const {
-	return currentLine->gapBuffer.getCursorPosition();
-}
-
-int GapBufferLinkedList::getLinesCount() const {
-	int count = 0;
-	Line* temp = head;
-	while (temp) {
-		++count;
-		temp = temp->next;
-	}
-	return count;
+    return currentLine->gapBuffer.getVisualCursorPosition();
 }
 
 pair<int, int> GapBufferLinkedList::getCursorPosition() const {
-	return { getCursorRow(), getCursorColumn() };
+    return {cursorRow, currentLine->gapBuffer.getVisualCursorPosition()};
 }
 
-void GapBufferLinkedList::splitLine() {
-	int cursorPos = currentLine->gapBuffer.getCursorPosition();
-	string rightContent = currentLine->gapBuffer.getTextAfterCursor();
-	currentLine->gapBuffer.deleteToEnd();
-	Line* newLine = new Line();
-	newLine->prev = currentLine;
-	newLine->next = currentLine->next;
-	if (currentLine->next) {
-		currentLine->next->prev = newLine;
-	}
-	currentLine->next = newLine;
-	newLine->gapBuffer.insert(rightContent);
-	currentLine = newLine;
-	currentLine->gapBuffer.moveCursor(0);
-	++cursorRow;
-}
-
-void GapBufferLinkedList::mergeLine() {
-	Line* temp = currentLine;
-	currentLine = currentLine->prev;
-	currentLine->gapBuffer.insert(temp->gapBuffer.getTextAfterCursor());
-	currentLine->next = temp->next;
-	if (temp->next) {
-		temp->next->prev = currentLine;
-	}
-	delete temp;
-	--cursorRow;
+int GapBufferLinkedList::getLinesCount() const {
+    int count = 0;
+    Line* temp = head;
+    while (temp) {
+        ++count;
+        temp = temp->next;
+    }
+    return count;
 }
 
 vector<string> GapBufferLinkedList::getLines(int from, int to) const {
-	vector<string> lines;
-	Line* temp = head;
-	for (int i = 0; i < from; ++i) {
-		temp = temp->next;
-	}
-	for (int i = from; i <= to; ++i) {
-		lines.push_back(temp->gapBuffer.getLine());
-		temp = temp->next;
-	}
-	return lines;
+    vector<string> lines;
+    Line* temp = head;
+    for (int i = 0; i < from; ++i) {
+        temp = temp->next;
+    }
+    for (int i = from; i <= to; ++i) {
+        lines.push_back(temp->gapBuffer.getLine());
+        temp = temp->next;
+    }
+    return lines;
+}
+
+void GapBufferLinkedList::splitLine() {
+    int cursorPos = currentLine->gapBuffer.getBufferCursorPosition();
+    string rightContent = currentLine->gapBuffer.getTextAfterCursor();
+    currentLine->gapBuffer.deleteToEnd();
+
+    Line* newLine = new Line();
+    newLine->prev = currentLine;
+    newLine->next = currentLine->next;
+    if (currentLine->next) {
+        currentLine->next->prev = newLine;
+    }
+    currentLine->next = newLine;
+    newLine->gapBuffer.insert(rightContent);
+    currentLine = newLine;
+    currentLine->gapBuffer.moveCursor(0);
+    ++cursorRow;
+}
+
+void GapBufferLinkedList::mergeLine() {
+    Line* temp = currentLine;
+    currentLine = currentLine->prev;
+    currentLine->gapBuffer.insert(temp->gapBuffer.getTextAfterCursor());
+    currentLine->next = temp->next;
+    if (temp->next) {
+        temp->next->prev = currentLine;
+    }
+    delete temp;
+    --cursorRow;
 }

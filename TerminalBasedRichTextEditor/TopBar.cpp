@@ -1,117 +1,113 @@
 #include "TopBar.h"
 
-TopBar::TopBar(vector<string> custom_entries, pair<int, int> screen_size, string file_path, string file_name, pair<int, int> local_cursor_pos, bool is_file_saved) {
-    this->custom_entries = custom_entries;
-    this->screen_size = screen_size;
-    this->file_path = file_path;
-    this->file_name = file_name;
-    this->local_cursor_pos = local_cursor_pos;
-    this->is_file_saved = is_file_saved;
-    this->status_bar_length = 0;
-    buildEntries();
+TopBar::TopBar(vector<eFormats> selectedFormats, string foregroundColor, string backgroundColor, bool isAutoSuggestionOn, pair<int, int> screenSize) {
+    this->selectedFormats = selectedFormats;
+    this->foregroundColor = foregroundColor;
+    this->backgroundColor = backgroundColor;
+    this->isAutoSuggestionOn = isAutoSuggestionOn;
+    this->screenSize = screenSize;
+    this->topBarLength = 0;
+}
+void TopBar::toggleFormat(eFormats format) {
+    if (find(selectedFormats.begin(), selectedFormats.end(), format) != selectedFormats.end()) {
+        selectedFormats.erase(remove(selectedFormats.begin(), selectedFormats.end(), format), selectedFormats.end());
+    } else {
+        selectedFormats.push_back(format);
+    }
 }
 
-void TopBar::updateFileName(string file_name) {
-    this->file_name = file_name;
-    entries[custom_entries.size() + entry_positions["file_name"] - 1] = file_name + (is_file_saved ? "" : "*");
+string TopBar::getCurrentFormatting(eFormats format) {
+    for (auto f : formats) {
+        if (!f.formatName == format)
+            continue;
+        if (find(selectedFormats.begin(), selectedFormats.end(), format) != selectedFormats.end())
+            return f.start;
+        else
+            return f.stop;
+    }
+    return "";
 }
 
-void TopBar::updateCursorPos(pair<int, int> local_cursor_pos) {
-    this->local_cursor_pos = local_cursor_pos;
-    entries[custom_entries.size() + entry_positions["cursor_pos"] - 1] = "Ln " + to_string(local_cursor_pos.first + 1) + ", Col " + to_string(local_cursor_pos.second + 1);
+string TopBar::getCurrentFormattings() {
+    string formattings = "";
+    for (auto format : formats) {
+        if (find(selectedFormats.begin(), selectedFormats.end(), format.formatName) != selectedFormats.end())
+            formattings += format.start;
+    }
+    return formattings;
 }
 
-void TopBar::updateIsFileSaved(bool is_file_saved) {
-    this->is_file_saved = is_file_saved;
-    entries[custom_entries.size() + entry_positions["file_name"] - 1] = file_name + (is_file_saved ? "" : "*");
+void TopBar::toggleAutoSuggestion() {
+    isAutoSuggestionOn = isAutoSuggestionOn ? 0 : 1;
 }
 
-void TopBar::updateFilePath(string file_path) {
-    this->file_path = file_path;
-    entries[custom_entries.size() + entry_positions["file_path"] - 1] = getFormattedFilePath("  ", 2);
+void TopBar::changeForegroundColor(string color) {
+    this->foregroundColor = color;
+}
+
+void TopBar::ChangeBackgroundColor(string color) {
+    this->backgroundColor = color;
 }
 
 void TopBar::updateScreenSize(pair<int, int> screen_size) {
-    this->screen_size = screen_size;
-    this->status_bar_length = 0;
+    this->screenSize = screen_size;
+    this->topBarLength = 0;
+}
+
+string TopBar::formatEntries() {
+    string pill = "#123044";
+    string bg = "#0c212f";
+    string fg = "#26bdbb";
+    string purple = "#7621de";
+    string default_color = "#000000";
+    string white = "#ffffff";
+    entries = {
+        "Background Color: " + TextFormatter::get_format(backgroundColor) + "",
+        "Foreground Color: " + TextFormatter::get_format(foregroundColor) + "",
+        "Auto Suggestion: " + TextFormatter::get_format(purple) + ((isAutoSuggestionOn) ? "On" : "Off"),
+    };
+
+    string format_string = "Format: ";
+    for (auto format : formats) {
+        if (find(selectedFormats.begin(), selectedFormats.end(), format.formatName) != selectedFormats.end())
+            format_string += TextFormatter::get_format(white, purple);
+        else
+            format_string += TextFormatter::get_format(purple, pill);
+        format_string += " " + format.start + format.formattingChar + format.stop + " ";
+    }
+    entries.push_back(format_string);
+
+    string formatted_entries = "";
+    for (auto entry : entries) {
+        formatted_entries += makePill(entry, pill, bg, fg);
+    }
+    return makePill(formatted_entries, bg, default_color, "");
+}
+
+string TopBar::makePill(string text, string pill_color, string pill_background, string foreground_color = "") {
+    string left = TextFormatter::get_format(pill_color, pill_background) + "";
+    string content = TextFormatter::get_format(foreground_color, pill_color) + " " + text + " ";
+    string right = TextFormatter::get_format(pill_color, pill_background) + "";
+
+    return " " + left + content + right + " ";
 }
 
 void TopBar::display() {
     string formatted_entries = formatEntries();
-    if (!status_bar_length) {
+    if (!topBarLength) {
         pair<int, int> position_old = Cursor::get_position();
-        status_bar_length = position_old.second;
+        topBarLength = position_old.second;
 
         Utils::printWide(Utils::stows(formatted_entries));
-        
-		pair<int, int> position_new = Cursor::get_position();
-        status_bar_length = position_new.second - position_old.second;
 
-		Cursor::move_to(position_old);
+        pair<int, int> position_new = Cursor::get_position();
+        topBarLength = position_new.second - position_old.second;
+        Cursor::clear_line();
+        Cursor::move_to_start_of_line();
     }
-    cout << setw((screen_size.second - status_bar_length) / 2) << ' ';
+    // cout << setw((screenSize.second - topBarLength) / 2) << ' ';
+    Cursor::move_right((screenSize.second - topBarLength) / 2);
     Utils::printWide(Utils::stows(formatted_entries));
     cout << TextFormatter::RESET;
     Cursor::clear_line_from_cursor();
-}
-
-void TopBar::buildEntries() {
-    for (int i = 0; i < custom_entries.size(); ++i) {
-        entries.push_back(custom_entries[i]);
-    }
-    entry_positions = {
-        {"custom_entries", 0},
-        {"file_path", 1},
-        {"file_name", 2},
-        {"cursor_pos", 3},
-    };
-    entries.push_back(getFormattedFilePath("  ", 1));
-    entries.push_back(file_name + (is_file_saved ? "" : "*"));
-    entries.push_back("Ln " + to_string(local_cursor_pos.first) + ", Col " + to_string(local_cursor_pos.second));
-}
-
-string TopBar::formatEntries() {
-    string text_to_display = "";
-    string default_color = "#000000";
-    string accent_color1 = "#26bdbb";
-    string accent_color2 = "#0c212f";
-    for (int i = 0; i < entries.size(); ++i) {
-        string fg, bg;
-        if ((i & 1) == 0) {
-            fg = accent_color1;
-            bg = accent_color2;
-        } else {
-            fg = accent_color2;
-            bg = accent_color1;
-        }
-        if (i == 0)
-            text_to_display += TextFormatter::get_format(bg, default_color) + "" + TextFormatter::get_format(fg, bg);
-        else
-            text_to_display += TextFormatter::get_format(default_color, bg) + "" + TextFormatter::get_format(fg, bg);
-        text_to_display += " " + entries[i] + " ";
-        text_to_display += TextFormatter::get_format(bg, default_color);
-        if (i < entries.size() - 1)
-            text_to_display += "";
-        else
-            text_to_display += "";
-    }
-    return text_to_display;
-}
-
-string TopBar::getFormattedFilePath(const string& delimiter, int max_folders = 0) {
-    stringstream ss(file_path);
-    string segment;
-    vector<string> path_segments;
-
-    while (getline(ss, segment, '\\')) {
-        path_segments.push_back(segment);
-    }
-    if (max_folders > 0 && max_folders < path_segments.size()) {
-        path_segments.erase(path_segments.begin(), path_segments.end() - max_folders);
-    }
-    string path_str = " ";
-    for (size_t i = 0; i < path_segments.size(); ++i) {
-        path_str += delimiter + path_segments[i];
-    }
-    return "\u001b]8;;" + file_path + "\u001b\\" + path_str + "\u001b]8;;\u001b\\";
 }

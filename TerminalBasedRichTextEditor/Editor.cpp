@@ -1,18 +1,16 @@
 #include "Editor.h"
 #include "AutoSuggestion.h"
 
-Editor::Editor() {
-	settings["autosuggestion"] = 1;
+Editor::Editor() : absolute_screen_size(Cursor::get_screen_size()), topBar({}, "#ffffff", "#000000", false, absolute_screen_size) {
 	local_current_pos = { 0, 0 };
 	vertical_scroll = 0;
 	horizontal_scroll = 0;
-	left_line_number_gap = 6;
+	left_line_number_gap = 20;
 	is_file_saved = false;
 	file_path = experimental::filesystem::current_path().string();
 	file_name = "Untitled.txt";
-	absolute_screen_size = Cursor::get_screen_size();
-	top_bound = 3;
-	left_bound = 1;
+	top_bound = 3 + 1;
+	left_bound = 10;
 	right_bound = absolute_screen_size.second;
 	bottom_bound = absolute_screen_size.first - 1;
 	statusBar = StatusBar({ "Rich Text Editor", "abd" }, absolute_screen_size, file_path, file_name, local_current_pos, is_file_saved);
@@ -59,9 +57,9 @@ Action Editor::handleKeyInput() {
 		case 8: // backspace key
 			gapBufferEditor.deleteCharLeft();
 			return DELETE;
-		case 9: // tab key
-			gapBufferEditor.insert("    ");
-			return INSERT;
+		// case 9: // tab key
+		// 	gapBufferEditor.insert("    ");
+		// 	return INSERT;
 		case '\r': // Enter key
 			gapBufferEditor.insert('\n');
 			return INSERT;
@@ -69,12 +67,30 @@ Action Editor::handleKeyInput() {
 			refreshScreen();
 			return OTHER;
 		case 14: // Ctrl + N
-			toggleSetting("autosuggestion");
-			return OTHER;
+			topBar.toggleAutoSuggestion();
+			return AUTOSUGGESTION;
+		case 2: // Ctrl + B
+			topBar.toggleFormat(eFormats::BOLD);
+			gapBufferEditor.insert(topBar.getCurrentFormatting(eFormats::BOLD));
+			return FORMAT;
+		case 9: // Ctrl + I
+			topBar.toggleFormat(eFormats::ITALIC);
+			gapBufferEditor.insert(topBar.getCurrentFormatting(eFormats::ITALIC));
+			return FORMAT;
+		case 21: // Ctrl + U
+			topBar.toggleFormat(eFormats::UNDERLINE);
+			gapBufferEditor.insert(topBar.getCurrentFormatting(eFormats::UNDERLINE));
+			return FORMAT;
+		case 20: // Ctrl + T
+			topBar.toggleFormat(eFormats::STRIKETHROUGH);
+			gapBufferEditor.insert(topBar.getCurrentFormatting(eFormats::STRIKETHROUGH));
+			return FORMAT;
+		// case 26: // Ctrl + Z
+
 		case 27: // ESC key
 			return BREAK;
 		default:
-			if ((('A' <= key && key <= 'Z') || ('a' <= key && key <= 'z')) && settings["autosuggestion"]) {
+			if ((('A' <= key && key <= 'Z') || ('a' <= key && key <= 'z')) && topBar.isAutoSuggestionOn) {
 				string word = string(1, key);
 				bool isComplete = AutoSuggestion::getInput(4, word, getAbsPos(local_current_pos), 30);
 				gapBufferEditor.insert(word);
@@ -88,16 +104,13 @@ Action Editor::handleKeyInput() {
 	}
 }
 
-void Editor::toggleSetting(string settingName) {
-	settings[settingName] = (settings[settingName]) ? 0 : 1;
-}
-
 void Editor::refreshScreen() {
 	system("cls");
 	this->absolute_screen_size = Cursor::get_screen_size();
 	this->right_bound = absolute_screen_size.second;
 	this->bottom_bound = absolute_screen_size.first - 1;
 	this->statusBar.updateScreenSize(absolute_screen_size);
+	topBar.display();
 	renderAllLines(0);
 	Cursor::move_to(getAbsPos(local_current_pos));
 	render();
@@ -119,7 +132,7 @@ void Editor::renderAllLines(int from) {
 }
 
 void Editor::renderLineNumber(int row) const {
-	cout << TextFormatter::hex_to_ansi("#777777") << setw(left_line_number_gap) << to_string(row + 1) + "  " << TextFormatter::RESET;
+	cout << TextFormatter::hex_to_ansi("#777777") << setw(left_line_number_gap) << right << to_string(row + 1) + "  " << TextFormatter::RESET;
 }
 
 void Editor::render() {
@@ -132,6 +145,7 @@ void Editor::render() {
 }
 
 void Editor::run() {
+	topBar.display();
 	while (true) {
 		try {
 			render();
@@ -146,6 +160,13 @@ void Editor::run() {
 
 			int rowChange = gapBufferEditor.getCursorRow() - local_current_pos.first;
 			int colChange = gapBufferEditor.getCursorColumn() - local_current_pos.second;
+
+			if (action == FORMAT || action == AUTOSUGGESTION) {
+				Cursor::move_to({ 0,0 });
+				topBar.display();
+				Cursor::move_to(getAbsPos(local_current_pos));
+				continue;
+			}
 
 			if (!rowChange && !colChange && action != INSERT && action != DELETE)
 				continue;
@@ -162,12 +183,26 @@ void Editor::run() {
 			else if (rowChange < 0) {
 				renderAllLines(local_current_pos.first);
 			}
+			// else if (colChange > 0) {
+			// 	// cout << topBar.getCurrentFormattings();
+			// 	// gapBufferEditor.displayCurrentLine(gapBufferEditor.getCursorColumn() - colChange, -1);
+			// 	// cout << TextFormatter::RESET;
+			// }
 			else if (colChange > 0) {
-				gapBufferEditor.displayCurrentLine(gapBufferEditor.getCursorColumn() - colChange, -1);
+				Cursor::move_to({ getAbsRow(local_current_pos.first), getAbsCol(0) });
+				gapBufferEditor.displayCurrentLine();
 			}
+			// else if (colChange < 0) {
+			// 	Cursor::move_left(abs(colChange));
+			// 	cout << topBar.getCurrentFormattings();
+			// 	gapBufferEditor.displayCurrentLine(gapBufferEditor.getCursorColumn());
+			// 	cout << TextFormatter::RESET;
+			// 	cout << setw(abs(colChange)) << " ";
+			// }
 			else if (colChange < 0) {
-				Cursor::move_left(abs(colChange));
-				gapBufferEditor.displayCurrentLine(gapBufferEditor.getCursorColumn(), -1);
+				Cursor::move_to({ getAbsRow(local_current_pos.first), getAbsCol(0) });
+				gapBufferEditor.displayCurrentLine();
+				cout << TextFormatter::RESET;
 				cout << setw(abs(colChange)) << " ";
 			}
 			else if (action == INSERT) {
@@ -176,7 +211,7 @@ void Editor::run() {
 			else if (action == DELETE) {
 				renderAllLines(local_current_pos.first);
 			}
-			DebugUtils::displayDebugMessage(gapBufferEditor.getCurrentDebugLine(), { bottom_bound, left_bound });
+			//DebugUtils::displayDebugMessage(gapBufferEditor.getCurrentDebugLine(), { bottom_bound, left_bound });
 		}
 		catch (const char* e) {
 			DebugUtils::displayDebugMessage(e, { bottom_bound, left_bound });

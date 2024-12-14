@@ -43,13 +43,14 @@ void StatusBar::display() {
         status_bar_length = position_old.second;
 
         Utils::printWide(Utils::stows(formatted_entries));
-        
-		pair<int, int> position_new = Cursor::get_position();
-        status_bar_length = position_new.second - position_old.second;
 
-		Cursor::move_to(position_old);
+        pair<int, int> position_new = Cursor::get_position();
+        status_bar_length = position_new.second - position_old.second;
+        Cursor::clear_line();
+        Cursor::move_to_start_of_line();
     }
-    cout << setw((screen_size.second - status_bar_length) / 2) << ' ';
+    // cout << setw((screen_size.second - status_bar_length) / 2) << ' ';
+    Cursor::move_right((screen_size.second - status_bar_length) / 2);
     Utils::printWide(Utils::stows(formatted_entries));
     cout << TextFormatter::RESET;
     Cursor::clear_line_from_cursor();

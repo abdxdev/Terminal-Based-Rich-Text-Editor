@@ -7,20 +7,21 @@
 using namespace std;
 
 class GapBufferLinkedList {
-public:
+private:
     struct Line {
         GapBuffer gapBuffer;
         Line* prev;
         Line* next;
-
-        Line(int capacity = 10);
+        explicit Line(int capacity = 10) : gapBuffer(capacity), prev(nullptr), next(nullptr) {}
     };
 
-private:
     Line* head;
     Line* currentLine;
     int cursorRow;
-    // void splitLineContent();
+
+private:
+    void splitLine();
+    void mergeLine();
 
 public:
     GapBufferLinkedList();
@@ -38,7 +39,7 @@ public:
     void moveCursor(int x, int y);
 
     void display() const;
-    void displayCurrentLine(int from, int to) const;
+    void displayCurrentLine(int from = 0, int to = -1) const;
     string getCurrentDebugLine() const;
 
     int getCursorRow() const;
@@ -46,8 +47,4 @@ public:
     int getLinesCount() const;
     pair<int, int> getCursorPosition() const;
     vector<string> getLines(int from, int to) const;
-
-private:
-    void splitLine();
-    void mergeLine();
 };

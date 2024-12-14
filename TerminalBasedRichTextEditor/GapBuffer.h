@@ -14,6 +14,7 @@ private:
     vector<char> buffer;
     int gapStart;
     int gapEnd;
+    int visualCursorPosition;
 
     string clipboard;
     pair<int, int> selection = {-1, -1};
@@ -22,6 +23,10 @@ private:
 
     void expandBuffer();
     void moveGap(int position);
+    bool isInAnsiSequence(int pos) const;
+    int getBufferPosition(int visualPos) const;
+    int getVisualPosition(int bufferPos) const;
+    int getAnsiSequenceLength(int start) const;
 
 public:
     GapBuffer(int initialSize = 10);
@@ -45,9 +50,11 @@ public:
 
     void display(int from, int to) const;
     string getDebugText() const;
-	string getLine() const;
+    string getLine() const;
     int getLength() const;
-    int getCursorPosition() const;
+    // int getCursorPosition() const;
+    int getBufferCursorPosition() const;
+    int getVisualCursorPosition() const;
 
     void undo();
     void redo();

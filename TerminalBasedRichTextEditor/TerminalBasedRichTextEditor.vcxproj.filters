@@ -48,6 +48,9 @@
     <ClCompile Include="AutoSuggestion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TopBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cursor.h">
@@ -71,9 +74,6 @@
     <ClInclude Include="GapBufferLinkedList.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="main2.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="StatusBar.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -84,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="AutoSuggestion.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TopBar.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

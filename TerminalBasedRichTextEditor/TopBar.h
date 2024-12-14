@@ -13,29 +13,53 @@
 
 using namespace std;
 
-class TopBar {
-private:
-    vector<string> custom_entries;
-    vector<string> entries;
-    map<string, int> entry_positions;
-    pair<int, int> screen_size;
-    string file_path;
-    string file_name;
-    bool is_file_saved;
-    pair<int, int> local_cursor_pos;
-    int status_bar_length;
+enum eFormats {
+	BOLD,
+	ITALIC,
+	UNDERLINE,
+	STRIKETHROUGH
+};
 
-    string formatEntries();
+class Format {
+public:
+	eFormats formatName;
+	char formattingChar;
+	string start;
+	string stop;
+	Format(eFormats formatName, char formattingChar, string start, string stop) : formatName(formatName), formattingChar(formattingChar), start(start), stop(stop) {}
+	Format() = default;
+};
+
+class TopBar {
+public:
+	const vector<Format> formats = {
+		Format(eFormats::BOLD, 'B', TextFormatter::BOLD, TextFormatter::N_BOLD),
+		Format(eFormats::ITALIC, 'I', TextFormatter::ITALIC, TextFormatter::N_ITALIC),
+		Format(eFormats::UNDERLINE, 'U', TextFormatter::UNDERLINE, TextFormatter::N_UNDERLINE),
+		Format(eFormats::STRIKETHROUGH, 'S', TextFormatter::STRIKETHROUGH, TextFormatter::N_STRIKETHROUGH),
+	};
+
+	vector<string> entries;
+	map<string, int> entryPositions;
+	pair<int, int> screenSize;
+	int topBarLength;
+	bool isAutoSuggestionOn;
+	string foregroundColor;
+	string backgroundColor;
+	vector<eFormats> selectedFormats;
 
 public:
-    TopBar() = default;
-    TopBar(vector<string> static_entries, pair<int, int> screen_size, string file_path, string file_name, pair<int, int> local_cursor_pos, bool is_file_saved);
-    string getFormattedFilePath(const string& delimiter, int max_folders);
-    void buildEntries();
-    void updateFileName(string file_name);
-    void updateCursorPos(pair<int, int> local_cursor_pos);
-    void updateIsFileSaved(bool is_file_saved);
-    void updateFilePath(string file_path);
-    void updateScreenSize(pair<int, int> screen_size);
-    void display();
+	TopBar() = default;
+	TopBar(vector<eFormats> selectedFormats, string foregroundColor, string backgroundColor, bool isAutoSuggestionOn, pair<int, int> screenSize);
+	string makePill(string text, string pill_color, string pill_background, string foreground_color);
+	void toggleFormat(eFormats selectedFormat);
+	string getCurrentFormatting(eFormats format);
+	string getCurrentFormattings();
+	void toggleAutoSuggestion();
+	void changeForegroundColor(string color);
+	void ChangeBackgroundColor(string color);
+
+	void updateScreenSize(pair<int, int> screenSize);
+	string formatEntries();
+	void display();
 };

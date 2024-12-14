@@ -140,6 +140,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="TextFormatter.cpp" />
+    <ClCompile Include="TopBar.cpp" />
     <ClCompile Include="Trie.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -150,10 +151,10 @@
     <ClInclude Include="GapBuffer.h" />
     <ClInclude Include="GapBufferLinkedList.h" />
     <ClInclude Include="AutoSuggestion.h" />
-    <ClInclude Include="main2.h" />
     <ClInclude Include="StatusBar.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="TextFormatter.h" />
+    <ClInclude Include="TopBar.h" />
     <ClInclude Include="Trie.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
