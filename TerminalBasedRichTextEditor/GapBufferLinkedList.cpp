@@ -45,6 +45,14 @@ void GapBufferLinkedList::deleteCharRight() {
     }
 }
 
+void GapBufferLinkedList::undo() {
+    currentLine->gapBuffer.undo();
+}
+
+void GapBufferLinkedList::redo() {
+    currentLine->gapBuffer.redo();
+}
+
 void GapBufferLinkedList::moveCursorUp() {
     if (!currentLine->prev)
         return;

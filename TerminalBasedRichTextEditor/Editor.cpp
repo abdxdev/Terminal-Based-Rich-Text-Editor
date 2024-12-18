@@ -113,7 +113,16 @@ Action Editor::handleKeyInput() {
             topBar.toggleFormat(eFormats::STRIKETHROUGH);
             gapBufferEditor.insert(topBar.getCurrentFormatting(eFormats::STRIKETHROUGH));
             return FORMAT;
-            // case 26: // Ctrl + Z
+        case 26: // Ctrl + Z
+            gapBufferEditor.undo();
+            renderAllLines(local_current_pos.first);
+            local_current_pos = { gapBufferEditor.getCursorRow(), gapBufferEditor.getCursorColumn() };
+            return INSERT;
+        case 25: // Ctrl + Y
+            gapBufferEditor.redo();
+            renderAllLines(local_current_pos.first);
+            local_current_pos = { gapBufferEditor.getCursorRow(), gapBufferEditor.getCursorColumn() };
+            return INSERT;
 
         case 27: // ESC key
             return BREAK;
@@ -220,23 +229,11 @@ void Editor::run() {
             } else if (rowChange < 0) {
                 renderAllLines(local_current_pos.first);
             }
-            // else if (colChange > 0) {
-            // 	// cout << topBar.getCurrentFormattings();
-            // 	// gapBufferEditor.displayCurrentLine(gapBufferEditor.getCursorColumn() - colChange, -1);
-            // 	// cout << TextFormatter::RESET;
-            // }
             else if (colChange > 0) {
                 Cursor::move_to({getAbsRow(local_current_pos.first), getAbsCol(0)});
                 gapBufferEditor.displayCurrentLine();
                 cout << TextFormatter::RESET;
             }
-            // else if (colChange < 0) {
-            // 	Cursor::move_left(abs(colChange));
-            // 	cout << topBar.getCurrentFormattings();
-            // 	gapBufferEditor.displayCurrentLine(gapBufferEditor.getCursorColumn());
-            // 	cout << TextFormatter::RESET;
-            // 	cout << setw(abs(colChange)) << " ";
-            // }
             else if (colChange < 0) {
                 Cursor::move_to({getAbsRow(local_current_pos.first), getAbsCol(0)});
                 gapBufferEditor.displayCurrentLine();

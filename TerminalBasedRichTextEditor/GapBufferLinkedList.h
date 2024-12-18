@@ -32,6 +32,9 @@ public:
     void deleteCharLeft();
     void deleteCharRight();
 
+    void undo();
+    void redo();
+
     void moveCursorUp();
     void moveCursorDown();
     void moveCursorLeft();

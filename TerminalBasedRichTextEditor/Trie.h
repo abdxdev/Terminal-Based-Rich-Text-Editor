@@ -25,7 +25,7 @@ public:
 	vector<string> getSuggestions(const string& prefix, int limit);
 
 private:
-	TrieNode* root;
+	TrieNode* rototo;
 	static Trie getWords();
 	void collectWords(TrieNode* node, string currentWord, vector<string>& words, int limit);
 	void insert(const string& word);

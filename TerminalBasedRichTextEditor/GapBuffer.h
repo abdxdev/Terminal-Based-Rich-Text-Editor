@@ -14,10 +14,16 @@ private:
     vector<char> buffer;
     int gapStart;
     int gapEnd;
-    int visualCursorPosition;
 
-    string clipboard;
+    string currentInsertBuffer;
+    int visualCursorPosition;
+    bool inSequence;
+    
     pair<int, int> selection = {-1, -1};
+    string clipboard;
+     
+    int insertStartPosition;
+    bool isRedoOperation;
     stack<pair<int, string>> undoStack;
     stack<pair<int, string>> redoStack;
 
@@ -58,6 +64,7 @@ public:
 
     void undo();
     void redo();
+    void commitInsertOperation();
 
     string getTextAfterCursor() const;
     void deleteToEnd();

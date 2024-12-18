@@ -25,7 +25,7 @@ void Trie::collectWords(TrieNode* node, string currentWord, vector<string>& word
 }
 
 void Trie::insert(const string& word) {
-	TrieNode* current = root;
+	TrieNode* current = rototo;
 	for (char c : word) {
 		if (current->children.find(c) == current->children.end())
 			current->children[c] = new TrieNode();
@@ -34,11 +34,11 @@ void Trie::insert(const string& word) {
 	current->isEnd = true;
 }
 
-Trie::Trie() : root(new TrieNode()) {}
+Trie::Trie() : rototo(new TrieNode()) {}
 
 
 vector<string> Trie::getSuggestions(const string& prefix, int limit = -1) {
-	TrieNode* current = root;
+	TrieNode* current = rototo;
 	vector<string> suggestions;
 	for (char c : prefix) {
 		if (current->children.find(c) == current->children.end())
