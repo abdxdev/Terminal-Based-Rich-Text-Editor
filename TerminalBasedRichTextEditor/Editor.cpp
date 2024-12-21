@@ -2,7 +2,7 @@
 #include "AutoSuggestion.h"
 #include "ColorSelector.h"
 
-Editor::Editor() : absolute_screen_size(Cursor::get_screen_size()), topBar({}, "#ffffff", "#000000", false, absolute_screen_size) {
+Editor::Editor() : absolute_screen_size(Cursor::get_screen_size()), topBar({}, "#ffffff", "#000000", false, absolute_screen_size, 2) {
     local_current_pos = {0, 0};
     vertical_scroll = 0;
     horizontal_scroll = 0;
@@ -11,10 +11,10 @@ Editor::Editor() : absolute_screen_size(Cursor::get_screen_size()), topBar({}, "
     file_path = experimental::filesystem::current_path().string();
     file_name = "Untitled.txt";
     top_bound = 3 + 1;
-    left_bound = 10;
+    left_bound = 3;
     right_bound = absolute_screen_size.second;
     bottom_bound = absolute_screen_size.first - 1;
-    statusBar = StatusBar({"Rich Text Editor", "abd"}, absolute_screen_size, file_path, file_name, local_current_pos, is_file_saved);
+    statusBar = StatusBar({"Rich Text Editor", "windows"}, absolute_screen_size, file_path, file_name, local_current_pos, is_file_saved);
 }
 
 pair<int, int> Editor::getAbsPos(const pair<int, int>& pos) const {
@@ -66,6 +66,9 @@ Action Editor::handleKeyInput() {
             return AUTOSUGGESTION;
         case 62: // F4
             return FULL_REFRESH;
+        case 63: // F5
+            topBar.toggleCursorStyle();
+            Cursor::change_cursor_style(topBar.cursorStyle);
         }
     } else if (key == 224) {
         switch (_getch()) {
@@ -123,7 +126,10 @@ Action Editor::handleKeyInput() {
             renderAllLines(local_current_pos.first);
             local_current_pos = { gapBufferEditor.getCursorRow(), gapBufferEditor.getCursorColumn() };
             return INSERT;
-
+        case 19: // Ctrl + S
+            gapBufferEditor.save(statusBar.file_name);
+            statusBar.updateIsFileSaved(true);
+            return SOFT_REFRESH;
         case 27: // ESC key
             return BREAK;
         default:
@@ -187,6 +193,7 @@ void Editor::render() {
 
 void Editor::run() {
     topBar.display();
+    Cursor::change_cursor_style(topBar.cursorStyle);
     while (true) {
         try {
             render();
@@ -224,6 +231,9 @@ void Editor::run() {
                 continue;
 
             Cursor::clear_line_from_cursor();
+
+            statusBar.updateIsFileSaved(false);
+            
             if (rowChange > 0) {
                 renderAllLines(local_current_pos.first);
             } else if (rowChange < 0) {
@@ -244,7 +254,7 @@ void Editor::run() {
             } else if (action == DELETE) {
                 renderAllLines(local_current_pos.first);
             }
-            // DebugUtils::displayDebugMessage(gapBufferEditor.getCurrentDebugLine(), { bottom_bound, left_bound });
+            //  DebugUtils::displayDebugMessage(gapBufferEditor.getCurrentDebugLine(), { bottom_bound, left_bound });
         } catch (const char* e) {
             DebugUtils::displayDebugMessage(e, {bottom_bound, left_bound});
         }

@@ -14,7 +14,7 @@
 using namespace std;
 
 class StatusBar {
-private:
+public:
     vector<string> custom_entries;
     vector<string> entries;
     map<string, int> entry_positions;

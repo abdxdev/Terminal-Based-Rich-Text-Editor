@@ -159,6 +159,16 @@ vector<string> GapBufferLinkedList::getLines(int from, int to) const {
     return lines;
 }
 
+void GapBufferLinkedList::save(string file_path) {
+    ofstream file(file_path);
+    Line* temp = head;
+    while (temp) {
+        file << temp->gapBuffer.getLine() << '\n';
+        temp = temp->next;
+    }
+    file.close();
+}
+
 void GapBufferLinkedList::splitLine() {
     int cursorPos = currentLine->gapBuffer.getBufferCursorPosition();
     string rightContent = currentLine->gapBuffer.getTextAfterCursor();

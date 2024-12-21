@@ -50,4 +50,5 @@ public:
     int getLinesCount() const;
     pair<int, int> getCursorPosition() const;
     vector<string> getLines(int from, int to) const;
+    void save(string file_path);
 };

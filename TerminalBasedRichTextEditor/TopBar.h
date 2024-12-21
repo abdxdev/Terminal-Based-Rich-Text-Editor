@@ -46,11 +46,12 @@ public:
 	bool isAutoSuggestionOn;
 	string foregroundColor;
 	string backgroundColor;
+	int cursorStyle;
 	vector<eFormats> selectedFormats;
 
 public:
 	TopBar() = default;
-	TopBar(vector<eFormats> selectedFormats, string foregroundColor, string backgroundColor, bool isAutoSuggestionOn, pair<int, int> screenSize);
+	TopBar(vector<eFormats> selectedFormats, string foregroundColor, string backgroundColor, bool isAutoSuggestionOn, pair<int, int> screenSize, int cursorStyle);
 	string makePill(string text, string pill_color, string pill_background, string foreground_color);
 	void toggleFormat(eFormats selectedFormat);
 	string getCurrentFormatting(eFormats format);
@@ -58,6 +59,7 @@ public:
 	void toggleAutoSuggestion();
 	void changeForegroundColor(string color);
 	void changeBackgroundColor(string color);
+	void toggleCursorStyle();
 
 	void updateScreenSize(pair<int, int> screenSize);
 	string formatEntries();

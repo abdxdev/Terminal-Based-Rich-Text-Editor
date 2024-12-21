@@ -1,12 +1,13 @@
 #include "TopBar.h"
 
-TopBar::TopBar(vector<eFormats> selectedFormats, string foregroundColor, string backgroundColor, bool isAutoSuggestionOn, pair<int, int> screenSize) {
+TopBar::TopBar(vector<eFormats> selectedFormats, string foregroundColor, string backgroundColor, bool isAutoSuggestionOn, pair<int, int> screenSize, int cursorStyle) {
     this->selectedFormats = selectedFormats;
     this->foregroundColor = foregroundColor;
     this->backgroundColor = backgroundColor;
     this->isAutoSuggestionOn = isAutoSuggestionOn;
     this->screenSize = screenSize;
     this->topBarLength = 0;
+    this->cursorStyle = cursorStyle;
 }
 void TopBar::toggleFormat(eFormats format) {
     if (find(selectedFormats.begin(), selectedFormats.end(), format) != selectedFormats.end()) {
@@ -47,6 +48,10 @@ void TopBar::changeBackgroundColor(string color) {
     this->backgroundColor = color;
 }
 
+void TopBar::toggleCursorStyle() {
+    cursorStyle = (cursorStyle + 1) % 3;
+}
+
 void TopBar::updateScreenSize(pair<int, int> screen_size) {
     this->screenSize = screen_size;
     this->topBarLength = 0;
@@ -60,9 +65,11 @@ string TopBar::formatEntries() {
     string default_color = "#000000";
     string white = "#ffffff";
     entries = {
-        "Background Color: " + TextFormatter::get_format(backgroundColor) + "",
-        "Foreground Color: " + TextFormatter::get_format(foregroundColor) + "",
-        "Auto Suggestion: " + TextFormatter::get_format(purple) + ((isAutoSuggestionOn) ? "On" : "Off"),
+        "Foreground Color [F1]: " + TextFormatter::get_format(foregroundColor) + "",
+        "Background Color [F2]: " + TextFormatter::get_format(backgroundColor) + "",
+        "Auto Suggestion [F3]: " + TextFormatter::get_format(purple) + ((isAutoSuggestionOn) ? "On" : "Off"),
+        "Refresh [F4]",
+        "Change Cursor [F5]",
     };
 
     string format_string = "Format: ";

@@ -29,6 +29,7 @@ namespace Cursor {
 	void restore_screen();
 	void save_screen_alt();
 	void restore_screen_alt();
+	void change_cursor_style(int i);
 	pair<int, int> get_position();
 	pair<int, int> get_screen_size();
 };

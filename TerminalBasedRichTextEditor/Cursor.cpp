@@ -108,6 +108,20 @@ void Cursor::clear_line_to_cursor() {
 	cout << "\033[1K";
 }
 
+void Cursor::change_cursor_style(int i) {
+	switch (i) {
+		case 0:
+			cout << "\033[2 q";
+			break;
+		case 1:
+			cout << "\033[4 q";
+			break;
+		case 2:
+			cout << "\033[6 q";
+			break;
+	}
+}
+
 pair<int, int> Cursor::get_screen_size() {
 	save_position();
 	move_to({ 5555, 5555 });
