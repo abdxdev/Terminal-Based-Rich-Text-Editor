@@ -173,7 +173,7 @@ void Editor::renderAllLines(int from) {
     for (int i = from; i <= to; i++) {
         Cursor::move_to({getAbsRow(i), left_bound});
         renderLineNumber(i);
-        cout << lines[i - from];
+        cout << lines[i - from] << TextFormatter::RESET;
         Cursor::clear_line_from_cursor();
     }
 }
@@ -192,6 +192,8 @@ void Editor::render() {
 }
 
 void Editor::run() {
+    system("cls");
+    cout << TextFormatter::RESET;
     topBar.display();
     Cursor::change_cursor_style(topBar.cursorStyle);
     while (true) {

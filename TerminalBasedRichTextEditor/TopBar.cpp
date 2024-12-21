@@ -65,11 +65,11 @@ string TopBar::formatEntries() {
     string default_color = "#000000";
     string white = "#ffffff";
     entries = {
-        "Foreground Color [F1]: " + TextFormatter::get_format(foregroundColor) + "",
-        "Background Color [F2]: " + TextFormatter::get_format(backgroundColor) + "",
-        "Auto Suggestion [F3]: " + TextFormatter::get_format(purple) + ((isAutoSuggestionOn) ? "On" : "Off"),
-        "Refresh [F4]",
-        "Change Cursor [F5]",
+        "Foreground F1: " + TextFormatter::get_format(foregroundColor) + "",
+        "Background F2: " + TextFormatter::get_format(backgroundColor) + "",
+        "Suggestions F3: " + TextFormatter::get_format(purple) + ((isAutoSuggestionOn) ? "On" : "Off"),
+        "Refresh F4",
+        "Change Cursor F5",
     };
 
     string format_string = "Format: ";
