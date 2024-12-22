@@ -7,10 +7,39 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
 class AutoSuggestion {
+private:
+static void heapify(vector<string>& vec, int n, int i) {
+    int largest = i;          
+    int left = 2 * i + 1;     
+    int right = 2 * i + 2;    
+
+    if (left < n && vec[left] > vec[largest]) {
+        largest = left;
+    }
+    if (right < n && vec[right] > vec[largest]) {
+        largest = right;
+    }
+    if (largest != i) {
+        swap(vec[i], vec[largest]);
+        heapify(vec, n, largest);
+    }
+}
+
+static void heapSort(vector<string>& vec) {
+    int n = vec.size();
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(vec, n, i);
+    }
+    for (int i = n - 1; i >= 0; i--) {
+        swap(vec[0], vec[i]);
+        heapify(vec, i, 0);
+    }
+}
 
 public:
 	static bool getInput(int maxSuggestions, string& token, pair<int, int> pos, int width) {
@@ -76,9 +105,10 @@ public:
 				if (token.length() == 0)
 					suggested.clear();
 				else {
-					if (!stop)
+					if (!stop) {
 						suggested = Trie::words.getSuggestions(token, maxSuggestions);
-					else
+						heapSort(suggested);
+					} else
 						suggested.clear();
 					column_width = min(width, Utils::max_column_width(suggested) + 2);
 				}

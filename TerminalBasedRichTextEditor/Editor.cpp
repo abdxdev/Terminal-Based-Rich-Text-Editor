@@ -135,7 +135,7 @@ Action Editor::handleKeyInput() {
         default:
             if ((('A' <= key && key <= 'Z') || ('a' <= key && key <= 'z')) && topBar.isAutoSuggestionOn) {
                 string word = string(1, key);
-                bool isComplete = AutoSuggestion::getInput(4, word, getAbsPos(local_current_pos), 30);
+                bool isComplete = AutoSuggestion::getInput(6, word, getAbsPos(local_current_pos), 30);
                 gapBufferEditor.insert(word);
                 if (isComplete)
                     gapBufferEditor.insert(' ');
