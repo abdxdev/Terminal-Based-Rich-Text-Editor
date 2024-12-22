@@ -6,7 +6,7 @@ Editor::Editor() : absolute_screen_size(Cursor::get_screen_size()), topBar({}, "
     local_current_pos = {0, 0};
     vertical_scroll = 0;
     horizontal_scroll = 0;
-    left_line_number_gap = 20;
+    left_line_number_gap = 10;
     is_file_saved = false;
     file_path = experimental::filesystem::current_path().string();
     file_name = "Untitled.txt";
