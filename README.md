@@ -7,10 +7,10 @@ A high-performance terminal-based rich text editor designed for speed and functi
 
 ### Features
 
-1. **Autosuggestions**: Real-time autocomplete powered by Tr:
-2. **Undo/Redo**: Stack-based undo/redo operatio:
-3. **GapBuffer Efficiency**: Smooth editing and fast cursor moveme:
-4. **Custom Shortcuts**: Bind frequently used actions for faster workfl:
+1. **Autosuggestions**: Real-time autocomplete powered by Trie.
+2. **Undo/Redo**: Stack-based undo/redo operatio.
+3. **GapBuffer Efficiency**: Smooth editing and fast cursor movement.
+4. **Custom Shortcuts**: Bind frequently used actions for faster workflow.
 
 ### Data Structures Used
 
@@ -22,8 +22,15 @@ A high-performance terminal-based rich text editor designed for speed and functi
 ### Getting Started
 
 1. Install a **Nerd Font** for enhanced terminal visuals from [nerdfonts.com](https://www.nerdfonts.com/font-downloads).
-2. Clone the repository and build the project with your preferred compiler.
-3. Launch the editor in a terminal supporting **Nerd Fonts**.
+2. Clone the repository and build the project with **C++14** support:
+   ```bash
+   git clone https://github.com/abdbbdii/TerminalBasedRichTextEditor.git
+   cd TerminalBasedRichTextEditor
+   start TerminalBasedRichTextEditor.sln
+   ```
+   Ensure your compiler supports **C++14**.
+3. Launch the editor in a terminal supporting **Nerd Fonts**. 
+> _Note: You need to set the font in your terminal settings._
 
 ### Keyboard Shortcuts
 
