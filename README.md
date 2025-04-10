@@ -1,14 +1,14 @@
 # Terminal-Based Text Editor
 
-![alt text](https://github.com/abdbbdii/TerminalBasedRichTextEditor/blob/master/screenshots/screenshot_1.png?raw=true)
-![alt text](https://github.com/abdbbdii/TerminalBasedRichTextEditor/blob/master/screenshots/screenshot_2.png?raw=true)
+![alt text](https://github.com/abdxdev/TerminalBasedRichTextEditor/blob/master/screenshots/screenshot_1.png?raw=true)
+![alt text](https://github.com/abdxdev/TerminalBasedRichTextEditor/blob/master/screenshots/screenshot_2.png?raw=true)
 
 A high-performance terminal-based rich text editor designed for speed and functionality. It supports autosuggestions, undo/redo, and customizable shortcuts. The editor leverages advanced data structures to ensure smooth and efficient text editing.
 
 ### Features
 
 1. **Autosuggestions**: Real-time autocomplete powered by Trie.
-2. **Undo/Redo**: Stack-based undo/redo operatio.
+2. **Undo/Redo**: Stack-based undo/redo operation.
 3. **GapBuffer Efficiency**: Smooth editing and fast cursor movement.
 4. **Custom Shortcuts**: Bind frequently used actions for faster workflow.
 
@@ -24,7 +24,7 @@ A high-performance terminal-based rich text editor designed for speed and functi
 1. Install a **Nerd Font** for enhanced terminal visuals from [nerdfonts.com](https://www.nerdfonts.com/font-downloads).
 2. Clone the repository and build the project with **C++14** support:
    ```bash
-   git clone https://github.com/abdbbdii/TerminalBasedRichTextEditor.git
+   git clone https://github.com/abdxdev/TerminalBasedRichTextEditor.git
    cd TerminalBasedRichTextEditor
    start TerminalBasedRichTextEditor.sln
    ```
