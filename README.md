@@ -1,7 +1,7 @@
 # Terminal-Based Text Editor
 
-![alt text](https://github.com/abdxdev/TerminalBasedRichTextEditor/blob/master/screenshots/screenshot_1.png?raw=true)
-![alt text](https://github.com/abdxdev/TerminalBasedRichTextEditor/blob/master/screenshots/screenshot_2.png?raw=true)
+![alt text](https://github.com/abdxdev/Terminal-Based-Rich-Text-Editor/blob/master/screenshots/screenshot_1.png?raw=true)
+![alt text](https://github.com/abdxdev/Terminal-Based-Rich-Text-Editor/blob/master/screenshots/screenshot_2.png?raw=true)
 
 A high-performance terminal-based rich text editor designed for speed and functionality. It supports autosuggestions, undo/redo, and customizable shortcuts. The editor leverages advanced data structures to ensure smooth and efficient text editing.
 
