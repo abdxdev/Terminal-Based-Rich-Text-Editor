@@ -256,7 +256,7 @@ void Editor::run() {
             } else if (action == DELETE) {
                 renderAllLines(local_current_pos.first);
             }
-            //  DebugUtils::displayDebugMessage(gapBufferEditor.getCurrentDebugLine(), { bottom_bound, left_bound });
+              //DebugUtils::displayDebugMessage(gapBufferEditor.getCurrentDebugLine(), { bottom_bound, left_bound });
         } catch (const char* e) {
             DebugUtils::displayDebugMessage(e, {bottom_bound, left_bound});
         }
